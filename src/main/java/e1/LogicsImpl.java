@@ -14,6 +14,21 @@ public class LogicsImpl implements Logics {
         this.pawn = this.randomEmptyPosition();
         this.knight = this.randomEmptyPosition();	
     }
+
+	LogicsImpl(int size, Pair<Integer,Integer> knightInitialPosition, Pair<Integer,Integer> pawnInitialPosition){
+		if (knightInitialPosition.equals(pawnInitialPosition)) {
+			throw new IllegalArgumentException("Pawn and Knight cannot be initialized on same position");
+		}
+		
+		final int minimumBoardSize = 2;
+		if (size < minimumBoardSize) {
+			throw new IllegalArgumentException("Size cannot be lower than " + minimumBoardSize);
+		}
+
+    	this.size = size;
+        this.knight = knightInitialPosition;
+        this.pawn = pawnInitialPosition;
+    }
     
 	private final Pair<Integer,Integer> randomEmptyPosition(){
     	Pair<Integer,Integer> pos = new Pair<>(this.random.nextInt(size),this.random.nextInt(size));
