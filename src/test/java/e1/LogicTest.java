@@ -39,44 +39,22 @@ public class LogicTest {
 
   @Test
   void hasOneAndOnlyOneKnight() {
-    Boolean hasKnight = false;
-
-    var resultMap = resultForEachPosition((var position) -> {
-      return logics.hasKnight(position.getX(), position.getY());
-    });
-
-    for (var result : resultMap.values()) {
-      if (result) {
-        if (hasKnight) {
-          fail("board has multiple knights");
-        } else {
-          hasKnight = true;
-        }
-      }
-    }
-
-    assertTrue(hasKnight);
+    var numberOfKnights = resultForEachPosition(position -> logics.hasKnight(position.getX(), position.getY()))
+        .values()
+        .stream()
+        .filter(positionHasKnight -> positionHasKnight)
+        .count();
+    assertEquals(1, numberOfKnights);
   }
 
   @Test
   void hasOneAndOnlyOnePawn() {
-    Boolean hasPawn = false;
-
-    var resultMap = resultForEachPosition((var position) -> {
-      return logics.hasPawn(position.getX(), position.getY());
-    });
-
-    for (var result : resultMap.values()) {
-      if (result) {
-        if (hasPawn) {
-          fail("board has multiple pawns");
-        } else {
-          hasPawn = true;
-        }
-      }
-    }
-
-    assertTrue(hasPawn);
+    var numberOfPawns = resultForEachPosition(position -> logics.hasPawn(position.getX(), position.getY()))
+        .values()
+        .stream()
+        .filter(positionHasPawn -> positionHasPawn)
+        .count();
+    assertEquals(1, numberOfPawns);
   }
 
   /*
