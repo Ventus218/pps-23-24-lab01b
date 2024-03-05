@@ -15,14 +15,14 @@ public class LogicTest {
 
   @BeforeEach
   void init() {
-    logics = new LogicsImpl(SIZE);
+    logics = new LogicsImpl(SIZE, new ClassicLogicStrategy());
   }
 
   @Test
   void knightHitsPawn() {
     var pawnPosition = new Pair<Integer, Integer>(0, 0);
     var knightPosition = new Pair<Integer, Integer>(1, 2);
-    logics = new LogicsImpl(SIZE, knightPosition, pawnPosition);
+    logics = new LogicsImpl(SIZE, new ClassicLogicStrategy(), knightPosition, pawnPosition);
 
     assertAll(
         () -> assertTrue(logics.hit(pawnPosition.getX(), pawnPosition.getY())),
@@ -34,7 +34,7 @@ public class LogicTest {
     var pawnPosition = new Pair<Integer, Integer>(0, 0);
     var knightPosition = new Pair<Integer, Integer>(1, 2);
     var hitPosition = new Pair<Integer, Integer>(2, 0);
-    logics = new LogicsImpl(SIZE, knightPosition, pawnPosition);
+    logics = new LogicsImpl(SIZE, new ClassicLogicStrategy(), knightPosition, pawnPosition);
 
     assertAll(
         () -> assertFalse(logics.hit(hitPosition.getX(), hitPosition.getY())),
@@ -72,7 +72,7 @@ public class LogicTest {
     }, boardSize);
 
     var actualPositions = resultForEachPosition(position -> {
-      logics = new LogicsImpl(boardSize, initialKnightPosition, pawnPosition);
+      logics = new LogicsImpl(boardSize, new ClassicLogicStrategy(), initialKnightPosition, pawnPosition);
       var x = position.getX();
       var y = position.getY();
       logics.hit(x, y);
