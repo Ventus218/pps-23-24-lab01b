@@ -15,23 +15,6 @@ public class LogicsImpl implements Logics {
 		this.knight = initializeConfiguration.knightPosition();
 	}
 
-	LogicsImpl(int size, LogicStrategy logicStrategy, Pair<Integer, Integer> knightInitialPosition,
-			Pair<Integer, Integer> pawnInitialPosition) {
-		if (knightInitialPosition.equals(pawnInitialPosition)) {
-			throw new IllegalArgumentException("Pawn and Knight cannot be initialized on same position");
-		}
-
-		final int minimumBoardSize = 2;
-		if (size < minimumBoardSize) {
-			throw new IllegalArgumentException("Size cannot be lower than " + minimumBoardSize);
-		}
-
-		this.size = size;
-		this.logicStrategy = logicStrategy;
-		this.knight = knightInitialPosition;
-		this.pawn = pawnInitialPosition;
-	}
-
 	@Override
 	public boolean hit(int row, int col) {
 		if (row < 0 || col < 0 || row >= this.size || col >= this.size) {

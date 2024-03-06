@@ -24,7 +24,7 @@ public class ClassicLogicsImplTest extends LogicTest {
     void knightHitsPawn() {
         var pawnPosition = new Pair<Integer, Integer>(0, 0);
         var knightPosition = new Pair<Integer, Integer>(1, 2);
-        logics = new LogicsImpl(boardSize(), new ClassicLogicStrategy(), knightPosition, pawnPosition);
+        logics = new LogicsImpl(boardSize(), new ClassicLogicStrategy(), new FixedLogicInitializationStrategy(knightPosition, pawnPosition));
 
         assertAll(
                 () -> assertTrue(logics.hit(pawnPosition.getX(), pawnPosition.getY())),
@@ -36,7 +36,7 @@ public class ClassicLogicsImplTest extends LogicTest {
         var pawnPosition = new Pair<Integer, Integer>(0, 0);
         var knightPosition = new Pair<Integer, Integer>(1, 2);
         var hitPosition = new Pair<Integer, Integer>(2, 0);
-        logics = new LogicsImpl(boardSize(), new ClassicLogicStrategy(), knightPosition, pawnPosition);
+        logics = new LogicsImpl(boardSize(), new ClassicLogicStrategy(), new FixedLogicInitializationStrategy(knightPosition, pawnPosition));
 
         assertAll(
                 () -> assertFalse(logics.hit(hitPosition.getX(), hitPosition.getY())),
@@ -74,7 +74,7 @@ public class ClassicLogicsImplTest extends LogicTest {
         }, boardSize);
 
         var actualPositions = resultForEachPosition(position -> {
-            logics = new LogicsImpl(boardSize, new ClassicLogicStrategy(), initialKnightPosition, pawnPosition);
+            logics = new LogicsImpl(boardSize, new ClassicLogicStrategy(), new FixedLogicInitializationStrategy(initialKnightPosition, pawnPosition));
             var x = position.getX();
             var y = position.getY();
             logics.hit(x, y);
