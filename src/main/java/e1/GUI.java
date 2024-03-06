@@ -14,7 +14,7 @@ public class GUI extends JFrame {
     private final static int SIZE = 5;
     
     public GUI() {
-        this.logics = new LogicsImpl(SIZE, new ClassicLogicStrategy());
+        this.logics = new LogicsImpl(SIZE, new ClassicLogicStrategy(), new ClassicLogicInitializationStrategy(1234));
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setSize(100*SIZE, 100*SIZE);
         

@@ -1,20 +1,18 @@
 package e1;
 
-import java.util.*;
-
 public class LogicsImpl implements Logics {
 
 	private final Pair<Integer, Integer> pawn;
 	private Pair<Integer, Integer> knight;
-	private final Random random = new Random();
 	private final int size;
 	private final LogicStrategy logicStrategy;
 
-	public LogicsImpl(int size, LogicStrategy logicStrategy) {
+	public LogicsImpl(int size, LogicStrategy logicStrategy, LogicInitializationStrategy initializationStrategy) {
 		this.size = size;
 		this.logicStrategy = logicStrategy;
-		this.pawn = this.randomEmptyPosition();
-		this.knight = this.randomEmptyPosition();
+		var initializeConfiguration = initializationStrategy.initializeConfiguration(size);
+		this.pawn = initializeConfiguration.pawnPosition();
+		this.knight = initializeConfiguration.knightPosition();
 	}
 
 	LogicsImpl(int size, LogicStrategy logicStrategy, Pair<Integer, Integer> knightInitialPosition,
@@ -32,12 +30,6 @@ public class LogicsImpl implements Logics {
 		this.logicStrategy = logicStrategy;
 		this.knight = knightInitialPosition;
 		this.pawn = pawnInitialPosition;
-	}
-
-	private final Pair<Integer, Integer> randomEmptyPosition() {
-		Pair<Integer, Integer> pos = new Pair<>(this.random.nextInt(size), this.random.nextInt(size));
-		// the recursive call below prevents clash with an existing pawn
-		return this.pawn != null && this.pawn.equals(pos) ? randomEmptyPosition() : pos;
 	}
 
 	@Override

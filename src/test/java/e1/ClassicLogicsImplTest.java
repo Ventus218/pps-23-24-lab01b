@@ -16,7 +16,8 @@ public class ClassicLogicsImplTest extends LogicTest {
 
     @Override
     Logics makeLogics() {
-        return new LogicsImpl(boardSize(), new ClassicLogicStrategy());
+        return new LogicsImpl(boardSize(), new ClassicLogicStrategy(),
+                new ClassicLogicInitializationStrategy(1234));
     }
 
     @Test
