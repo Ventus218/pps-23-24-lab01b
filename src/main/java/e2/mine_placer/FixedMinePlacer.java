@@ -12,6 +12,11 @@ public class FixedMinePlacer implements MinePlacer {
 
     public FixedMinePlacer(int boardSize, Set<Pair<Integer, Integer>> minesPositions) {
         MinePlacer.checkPlaceMinesArguments(boardSize, minesPositions.size());
+        for (var mine : minesPositions) {
+            if (mine.getX() < 0 || mine.getY() < 0 || mine.getX() >= boardSize || mine.getY() >= boardSize) {
+                throw new IllegalArgumentException("Given mine positions exceed the board bounds");
+            }
+        }
         this.boardSize = boardSize;
         this.minesPositions = Set.copyOf(minesPositions);
     }

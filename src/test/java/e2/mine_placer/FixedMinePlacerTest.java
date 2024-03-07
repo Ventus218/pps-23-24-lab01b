@@ -11,6 +11,7 @@ import e2.Pair;
 
 public class FixedMinePlacerTest extends MinePlacerTest {
 
+    private static final int BOARD_SIZE = 3;
     Set<Pair<Integer, Integer>> minesPositions;
 
     FixedMinePlacerTest() {
@@ -24,7 +25,15 @@ public class FixedMinePlacerTest extends MinePlacerTest {
 
     @Override
     MinePlacer makeMinePlacer() {
-        return new FixedMinePlacer(3, minesPositions);
+        return new FixedMinePlacer(BOARD_SIZE, minesPositions);
+    }
+
+    @Test
+    void throwsIfMinesExceedBoardBounds() {
+        Set<Pair<Integer, Integer>> mines = new HashSet<>();
+        mines.add(new Pair<>(0, BOARD_SIZE + 1));
+
+        assertThrows(IllegalArgumentException.class, () -> new FixedMinePlacer(BOARD_SIZE, mines));
     }
 
     @Override
