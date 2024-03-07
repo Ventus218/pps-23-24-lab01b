@@ -8,4 +8,6 @@ public interface Logics {
 
     boolean hit(Pair<Integer, Integer> position);
 
+    int numberOfAdjacentMines(Pair<Integer, Integer> position);
+
 }

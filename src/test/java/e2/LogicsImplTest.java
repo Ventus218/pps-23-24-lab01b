@@ -3,6 +3,8 @@ package e2;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import e2.mine_placer.FixedMinePlacer;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.HashSet;
@@ -62,5 +64,37 @@ public class LogicsImplTest {
         assertAll(positionsWithoutMines
                 .stream()
                 .map(mine -> () -> assertFalse(logicsImpl.hit(mine))));
+    }
+
+    @Test
+    void numberOfAdjacentMines() {
+        Set<Pair<Integer, Integer>> minesPositions = new HashSet<>();
+        minesPositions.add(new Pair<>(0, 0));
+        minesPositions.add(new Pair<>(0, 1));
+        minesPositions.add(new Pair<>(0, 2));
+        minesPositions.add(new Pair<>(1, 0));
+        minesPositions.add(new Pair<>(2, 0));
+
+        // - 0 1 2
+        // 0|*|*|*|
+        // 1|*|5|2|
+        // 2|*|2|0|
+        logicsImpl = new LogicsImpl(new FixedMinePlacer(3, minesPositions));
+
+        assertAll(
+                () -> assertEquals(5, logicsImpl.numberOfAdjacentMines(new Pair<>(1, 1))),
+                () -> assertEquals(2, logicsImpl.numberOfAdjacentMines(new Pair<>(1, 2))),
+                () -> assertEquals(2, logicsImpl.numberOfAdjacentMines(new Pair<>(2, 1))),
+                () -> assertEquals(0, logicsImpl.numberOfAdjacentMines(new Pair<>(2, 2))));
+    }
+
+    @Test
+    void numberOfAdjacentMinesThrowsIfCalledOnAMine() {
+        Set<Pair<Integer, Integer>> minesPositions = new HashSet<>();
+        minesPositions.add(new Pair<>(0, 0));
+
+        logicsImpl = new LogicsImpl(new FixedMinePlacer(3, minesPositions));
+
+        assertThrows(IllegalStateException.class, () -> logicsImpl.numberOfAdjacentMines(new Pair<>(0, 0)));
     }
 }

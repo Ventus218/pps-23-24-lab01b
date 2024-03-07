@@ -32,4 +32,20 @@ public class LogicsImpl implements Logics {
     public boolean hit(Pair<Integer, Integer> position) {
         return mines().contains(position);
     }
+
+    @Override
+    public int numberOfAdjacentMines(Pair<Integer, Integer> position) {
+        if (mines().contains(position)) {
+            throw new IllegalStateException("numberOfAdjacentMines cannot be called on a mine");
+        }
+        return Math.toIntExact(mines()
+                .stream()
+                .filter(mine -> {
+                    var xDelta = Math.abs(mine.getX() - position.getX());
+                    var yDelta = Math.abs(mine.getY() - position.getY());
+                    var delta = xDelta + yDelta;
+                    return delta != 0 && xDelta <= 1 && yDelta <= 1;
+                })
+                .count());
+    }
 }
