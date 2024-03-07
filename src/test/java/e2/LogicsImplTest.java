@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class LogicsImplTest {
@@ -38,5 +39,28 @@ public class LogicsImplTest {
             }
         }
         fail(CALLS_TO_TEST_RANDOMICITY + " calls returned always the same mine configuration.");
+    }
+
+    @Test
+    void hitReturnsTrueWhenHittingAMine() {
+        assertAll(logicsImpl.mines()
+                .stream()
+                .map(mine -> () -> assertTrue(logicsImpl.hit(mine))));
+    }
+
+    @Test
+    void hitReturnsFalseWhenNotHittingAMine() {
+        Set<Pair<Integer, Integer>> positionsWithoutMines = new HashSet<>();
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int column = 0; column < BOARD_SIZE; column++) {
+                Pair<Integer, Integer> position = new Pair<>(row, column);
+                if (!logicsImpl.mines().contains(position)) {
+                    positionsWithoutMines.add(position);
+                }
+            }
+        }
+        assertAll(positionsWithoutMines
+                .stream()
+                .map(mine -> () -> assertFalse(logicsImpl.hit(mine))));
     }
 }

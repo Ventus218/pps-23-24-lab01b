@@ -34,4 +34,8 @@ public class LogicsImpl implements Logics {
         return Collections.unmodifiableSet(mines);
     }
 
+    @Override
+    public boolean hit(Pair<Integer, Integer> position) {
+        return mines().contains(position);
+    }
 }

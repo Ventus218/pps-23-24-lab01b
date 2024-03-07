@@ -75,7 +75,7 @@ public class GUI extends JFrame {
             // call the logic here
             // if this button is a mine, draw it "*"
             // disable the button
-            if (logics.mines().contains(position)) {
+            if (logics.hit(position)) {
                 button.setText("*");
             }
             button.setEnabled(false);
