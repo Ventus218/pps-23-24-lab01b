@@ -6,7 +6,7 @@ import java.util.Set;
 
 import e2.Pair;
 
-public class RandomMinePlacer implements MinePlacer {
+public class RandomMinePlacer extends AbstractMinePlacer {
     Random random;
 
     public RandomMinePlacer(long seed) {
@@ -18,21 +18,11 @@ public class RandomMinePlacer implements MinePlacer {
     }
 
     @Override
-    public Set<Pair<Integer, Integer>> placeMines(int numberOfMinesToPlace, int boardSize) {
-        if (boardSize < 1) {
-            throw new IllegalArgumentException("Board size can't be smaller than 1");
-        }
-        if (numberOfMinesToPlace < 0) {
-            throw new IllegalArgumentException("Can't place a negative amount of mines");
-        }
-        if (numberOfMinesToPlace > boardSize * boardSize) {
-            throw new IllegalArgumentException("Too many mines for a board with size " + boardSize);
-        }
+    protected Set<Pair<Integer, Integer>> placeMinesImplementation(int numberOfMinesToPlace, int boardSize) {
         Set<Pair<Integer, Integer>> mines = new HashSet<>();
         while (mines.size() < numberOfMinesToPlace) {
             mines.add(new Pair<>(random.nextInt(boardSize), random.nextInt(boardSize)));
         }
         return mines;
     }
-
 }
