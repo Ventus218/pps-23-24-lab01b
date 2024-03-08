@@ -1,36 +1,65 @@
 package e2;
 
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import e2.cell.*;
+import e2.grid.Grid;
+import e2.grid.GridImpl;
 import e2.mine_placer.MinePlacer;
 import e2.mine_placer.RandomMinePlacer;
 
 public class LogicsImpl implements Logics {
 
-    private final Set<Pair<Integer, Integer>> mines;
+    private final Grid grid;
 
     public LogicsImpl(MinePlacer minePlacer) {
         if (minePlacer.numberOfMinesToPlace() >= Math.pow(minePlacer.boardSize(), 2)) {
             throw new IllegalArgumentException("Mines cannot completely cover the board");
         }
-        this.mines = minePlacer.placeMines();
+        grid = new GridImpl(minePlacer.boardSize());
+        createCells(minePlacer);
     }
 
     public LogicsImpl(int size, int numberOfMines) {
         this(new RandomMinePlacer(size, numberOfMines));
     }
 
+    private void createCells(MinePlacer minePlacer) {
+        var mines = minePlacer.placeMines();
+        for (int x = 0; x < minePlacer.boardSize(); x++) {
+            for (int y = 0; y < minePlacer.boardSize(); y++) {
+                var position = new Pair<>(x, y);
+                if (mines.contains(position)) {
+                    grid.add(new MineCell(position));
+                } else {
+                    grid.add(new CellImpl(position));
+                }
+            }
+        }
+    }
+
     @Override
     public Set<Pair<Integer, Integer>> mines() {
-        return Collections.unmodifiableSet(mines);
+        return Collections
+                .unmodifiableSet(grid.getAll()
+                        .stream()
+                        .filter(cell -> cell instanceof MineCell)
+                        .map(cell -> new Pair<>(cell.getX(), cell.getY()))
+                        .collect(Collectors.toSet()));
     }
 
     @Override
     public boolean hit(Pair<Integer, Integer> position) {
-        return mines().contains(position);
+        var x = position.getX();
+        var y = position.getY();
+        var cell = grid.get(x, y);
+        if (cell.isPresent() && cell.get() instanceof MineCell mineCell) {
+            mineCell.hit();
+            return true;
+        }
+        return false;
     }
 
     @Override
