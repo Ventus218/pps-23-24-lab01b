@@ -32,16 +32,16 @@ public class GridImplTest {
     }
 
     private static final int SIDE_SIZE = 3;
-    Grid gridImpl;
+    Grid<GridPlaceable> gridImpl;
 
     @BeforeEach
     void init() {
-        gridImpl = new GridImpl(SIDE_SIZE);
+        gridImpl = new GridImpl<>(SIDE_SIZE);
     }
 
     @Test
     void sideSizeCannotBeLowerThanOne() {
-        assertThrows(IllegalArgumentException.class, () -> new GridImpl(0));
+        assertThrows(IllegalArgumentException.class, () -> new GridImpl<>(0));
     }
 
     @Test

@@ -12,13 +12,13 @@ import e2.mine_placer.RandomMinePlacer;
 
 public class LogicsImpl implements Logics {
 
-    private final Grid grid;
+    private final Grid<MineSweeperCell> grid;
 
     public LogicsImpl(MinePlacer minePlacer) {
         if (minePlacer.numberOfMinesToPlace() >= Math.pow(minePlacer.boardSize(), 2)) {
             throw new IllegalArgumentException("Mines cannot completely cover the board");
         }
-        grid = new GridImpl(minePlacer.boardSize());
+        grid = new GridImpl<>(minePlacer.boardSize());
         createCells(minePlacer);
     }
 
@@ -31,11 +31,7 @@ public class LogicsImpl implements Logics {
         for (int x = 0; x < minePlacer.boardSize(); x++) {
             for (int y = 0; y < minePlacer.boardSize(); y++) {
                 var position = new Pair<>(x, y);
-                if (mines.contains(position)) {
-                    grid.add(new MineCell(position));
-                } else {
-                    grid.add(new CellImpl(position));
-                }
+                grid.add(new MineSweeperCell(position, mines.contains(position)));
             }
         }
     }
@@ -45,7 +41,7 @@ public class LogicsImpl implements Logics {
         return Collections
                 .unmodifiableSet(grid.getAll()
                         .stream()
-                        .filter(cell -> cell instanceof MineCell)
+                        .filter(cell -> cell.hasMine())
                         .map(cell -> new Pair<>(cell.getX(), cell.getY()))
                         .collect(Collectors.toSet()));
     }
@@ -55,9 +51,9 @@ public class LogicsImpl implements Logics {
         var x = position.getX();
         var y = position.getY();
         var cell = grid.get(x, y);
-        if (cell.isPresent() && cell.get() instanceof MineCell mineCell) {
-            mineCell.hit();
-            return true;
+        if (cell.isPresent()) {
+            cell.get().hit();
+            return cell.get().hasMine();
         }
         return false;
     }
