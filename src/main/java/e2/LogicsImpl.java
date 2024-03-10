@@ -53,8 +53,20 @@ public class LogicsImpl implements Logics {
         var cell = grid.get(x, y);
         if (cell.isPresent()) {
             var mineSweeperCell = (MineSweeperCell) cell.get();
+            if (mineSweeperCell.wasHit()) {
+                throw new IllegalStateException("Can't hit same cell twice");
+            }
             mineSweeperCell.hit();
-            return mineSweeperCell.hasMine();
+            if (mineSweeperCell.hasMine()) {
+                return true;
+            }
+            if (numberOfAdjacentMines(position) == 0) {
+                for (var adjacentCell : mineSweeperCell.adjacentAddressables()) {
+                    if (!((MineSweeperCell) adjacentCell).wasHit()) {
+                        hit(new Pair<>(adjacentCell.getX(), adjacentCell.getY()));
+                    }
+                }
+            }
         }
         return false;
     }
@@ -71,4 +83,10 @@ public class LogicsImpl implements Logics {
                 .filter(mineSweeperCell -> mineSweeperCell.hasMine())
                 .count());
     }
+
+    @Override
+    public MineSweeperCell getCell(Pair<Integer, Integer> position) {
+        return (MineSweeperCell) grid.get(position.getX(), position.getY()).get();
+    }
+
 }

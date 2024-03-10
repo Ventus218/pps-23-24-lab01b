@@ -10,4 +10,6 @@ public interface Logics {
 
     int numberOfAdjacentMines(Pair<Integer, Integer> position);
 
+    MineSweeperCell getCell(Pair<Integer, Integer> pair);
+
 }

@@ -44,6 +44,15 @@ public class LogicsImplTest {
     }
 
     @Test
+    void getRightCell() {
+        MineSweeperCell cell = logicsImpl.getCell(new Pair<>(0, 0));
+        assertEquals(0, cell.getX());
+        assertEquals(0, cell.getY());
+        assertFalse(cell.wasHit());
+        assertFalse(cell.hasFlag());
+    }
+
+    @Test
     void hitReturnsTrueWhenHittingAMine() {
         assertAll(logicsImpl.mines()
                 .stream()
@@ -63,7 +72,20 @@ public class LogicsImplTest {
         }
         assertAll(positionsWithoutMines
                 .stream()
-                .map(mine -> () -> assertFalse(logicsImpl.hit(mine))));
+                .map(positionWithoutMine -> {
+                    return () -> {
+                        if (!logicsImpl.getCell(positionWithoutMine).wasHit()) {
+                            assertFalse(logicsImpl.hit(positionWithoutMine));
+                        }
+                    };
+                }));
+    }
+
+    @Test
+    void hitThrowsIfCellAlreadyHit() {
+        var position = new Pair<Integer, Integer>(0, 0);
+        logicsImpl.hit(position);
+        assertThrows(IllegalStateException.class, () -> logicsImpl.hit(position));
     }
 
     @Test
@@ -96,5 +118,28 @@ public class LogicsImplTest {
         logicsImpl = new LogicsImpl(new FixedMinePlacer(3, minesPositions));
 
         assertThrows(IllegalStateException.class, () -> logicsImpl.numberOfAdjacentMines(new Pair<>(0, 0)));
+    }
+
+    @Test
+    void hitIsCalledAutomaticallyOnCellsWithoutAdjacentMines() {
+        Set<Pair<Integer, Integer>> minesPositions = new HashSet<>();
+        minesPositions.add(new Pair<>(0, 0));
+        minesPositions.add(new Pair<>(0, 1));
+        minesPositions.add(new Pair<>(0, 2));
+        minesPositions.add(new Pair<>(1, 0));
+        minesPositions.add(new Pair<>(2, 0));
+
+        // - 0 1 2
+        // 0|*|*|*|
+        // 1|*|5|2|
+        // 2|*|2|0|
+        logicsImpl = new LogicsImpl(new FixedMinePlacer(3, minesPositions));
+        logicsImpl.hit(new Pair<>(2, 2));
+        assertAll(() -> assertTrue(logicsImpl.getCell(new Pair<>(1, 1)).wasHit()),
+                () -> assertTrue(logicsImpl.getCell(new Pair<>(1, 2)).wasHit()),
+                () -> assertTrue(logicsImpl.getCell(new Pair<>(2, 1)).wasHit()));
+        assertAll(minesPositions
+                .stream()
+                .map((p) -> () -> assertFalse(logicsImpl.getCell(p).wasHit())));
     }
 }
