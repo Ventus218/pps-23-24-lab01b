@@ -4,10 +4,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-public class GridPlaceableWithAdjacenceTest extends GridPlaceableTest {
+public class GridPlaceableWithAdjacenceImplTest extends GridPlaceableTest {
 
-    GridPlaceableWithAdjacence gridPlaceableWithAdjacence() {
-        return (GridPlaceableWithAdjacence) gridPlaceable;
+    GridPlaceableWithAdjacenceImpl gridPlaceableWithAdjacence() {
+        return (GridPlaceableWithAdjacenceImpl) gridPlaceable;
     }
 
     @Override
@@ -22,7 +22,7 @@ public class GridPlaceableWithAdjacenceTest extends GridPlaceableTest {
 
     @Override
     GridPlaceable makeGridPlaceable() {
-        return new GridPlaceableWithAdjacence(x(), y());
+        return new GridPlaceableWithAdjacenceImpl(x(), y());
     }
 
     @Override
@@ -55,7 +55,7 @@ public class GridPlaceableWithAdjacenceTest extends GridPlaceableTest {
 
     @Test
     void placeableIsAddedToOtherPlaceablesWithAdjacenceList() {
-        var other = new GridPlaceableWithAdjacence(0, 0);
+        var other = new GridPlaceableWithAdjacenceImpl(0, 0);
         grid.add(other);
         grid.add(gridPlaceableWithAdjacence());
         assertTrue(other.adjacentPlaceables().contains(gridPlaceableWithAdjacence()));
@@ -63,7 +63,7 @@ public class GridPlaceableWithAdjacenceTest extends GridPlaceableTest {
 
     @Test
     void placeableIsNotAddedToOtherPlaceablesWithAdjacenceListIfNotAdjacent() {
-        var other = new GridPlaceableWithAdjacence(3, 3);
+        var other = new GridPlaceableWithAdjacenceImpl(3, 3);
         grid.add(other);
         grid.add(gridPlaceableWithAdjacence());
         assertAll(() -> assertFalse(other.adjacentPlaceables().contains(gridPlaceableWithAdjacence())),
