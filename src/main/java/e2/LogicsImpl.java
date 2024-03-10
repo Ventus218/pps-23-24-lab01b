@@ -64,14 +64,11 @@ public class LogicsImpl implements Logics {
         if (mines().contains(position)) {
             throw new IllegalStateException("numberOfAdjacentMines cannot be called on a mine");
         }
-        return Math.toIntExact(mines()
+        var cell = (MineSweeperCell) grid.get(position.getX(), position.getY()).get();
+        return Math.toIntExact(cell.adjacentPlaceables()
                 .stream()
-                .filter(mine -> {
-                    var xDelta = Math.abs(mine.getX() - position.getX());
-                    var yDelta = Math.abs(mine.getY() - position.getY());
-                    var delta = xDelta + yDelta;
-                    return delta != 0 && xDelta <= 1 && yDelta <= 1;
-                })
+                .map(placeable -> ((MineSweeperCell) placeable))
+                .filter(mineSweeperCell -> mineSweeperCell.hasMine())
                 .count());
     }
 }

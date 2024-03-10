@@ -44,8 +44,8 @@ public class GridPlaceableWithAdjacenceImpl implements GridPlaceableWithAdjacenc
                             return delta != 0 && xDelta <= 1 && yDelta <= 1;
                         })
                         .peek(placeable -> {
-                            if (placeable instanceof GridPlaceableWithAdjacenceImpl p) {
-                                p.adjacentPlaceables.add(this);
+                            if (placeable instanceof GridPlaceableWithAdjacence p) {
+                                p.adjacentPlaceables().add(this);
                             }
                         })
                         .toList());
