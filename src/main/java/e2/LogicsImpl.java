@@ -5,7 +5,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import e2.grid.Grid;
-import e2.grid.GridImpl;
+import e2.grid.GridWithAdjacenceImpl;
 import e2.mine_placer.MinePlacer;
 import e2.mine_placer.RandomMinePlacer;
 
@@ -17,7 +17,7 @@ public class LogicsImpl implements Logics {
         if (minePlacer.numberOfMinesToPlace() >= Math.pow(minePlacer.boardSize(), 2)) {
             throw new IllegalArgumentException("Mines cannot completely cover the board");
         }
-        grid = new GridImpl(minePlacer.boardSize());
+        grid = new GridWithAdjacenceImpl(minePlacer.boardSize());
         createCells(minePlacer);
     }
 
@@ -65,9 +65,9 @@ public class LogicsImpl implements Logics {
             throw new IllegalStateException("numberOfAdjacentMines cannot be called on a mine");
         }
         var cell = (MineSweeperCell) grid.get(position.getX(), position.getY()).get();
-        return Math.toIntExact(cell.adjacentPlaceables()
+        return Math.toIntExact(cell.adjacentAddressables()
                 .stream()
-                .map(placeable -> ((MineSweeperCell) placeable))
+                .map(addressable -> ((MineSweeperCell) addressable))
                 .filter(mineSweeperCell -> mineSweeperCell.hasMine())
                 .count());
     }

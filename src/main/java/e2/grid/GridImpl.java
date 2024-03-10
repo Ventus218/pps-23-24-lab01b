@@ -10,7 +10,7 @@ import e2.Pair;
 public class GridImpl implements Grid {
 
     private int sideSize;
-    private final Map<Pair<Integer, Integer>, GridPlaceable> gridMap = new HashMap<>();
+    private final Map<Pair<Integer, Integer>, XYAddressable> gridMap = new HashMap<>();
 
     public GridImpl(int sideSize) {
         if (sideSize < 1) {
@@ -20,26 +20,25 @@ public class GridImpl implements Grid {
     }
 
     @Override
-    public void add(GridPlaceable placeable) {
-        int x = placeable.getX();
-        int y = placeable.getY();
+    public void add(XYAddressable xyAddressable) {
+        int x = xyAddressable.getX();
+        int y = xyAddressable.getY();
         checkBounds(x, y);
         var pair = new Pair<>(x, y);
         if (gridMap.containsKey(pair)) {
             throw new IllegalStateException("Trying to add to non-empty grid coordinates");
         }
-        gridMap.put(pair, placeable);
-        placeable.setGrid(this);
+        gridMap.put(pair, xyAddressable);
     }
 
     @Override
-    public Optional<GridPlaceable> get(int x, int y) {
+    public Optional<XYAddressable> get(int x, int y) {
         checkBounds(x, y);
         return Optional.ofNullable(gridMap.get(new Pair<>(x, y)));
     }
 
     @Override
-    public Collection<GridPlaceable> getAll() {
+    public Collection<XYAddressable> getAll() {
         return gridMap.values();
     }
 

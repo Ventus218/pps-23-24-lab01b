@@ -30,33 +30,33 @@ public class GridImplTest {
     }
 
     @Test
-    void addPlaceable() {
+    void addAddressable() {
         int x = 0;
         int y = 0;
-        GridPlaceable placeable = new GridPlaceableImpl(x, y);
-        gridImpl.add(placeable);
-        assertEquals(Optional.of(placeable), gridImpl.get(x, y));
+        XYAddressable addressable = new XYAddressableImpl(x, y);
+        gridImpl.add(addressable);
+        assertEquals(Optional.of(addressable), gridImpl.get(x, y));
     }
 
     @Test
-    void addPlaceableWithSameCoordinatesNotAllowed() {
-        GridPlaceable placeable = new GridPlaceableImpl(0, 0);
-        gridImpl.add(placeable);
-        GridPlaceable placeable2 = new GridPlaceableImpl(0, 0);
-        assertThrows(IllegalStateException.class, () -> gridImpl.add(placeable2));
+    void addAddressableWithSameCoordinatesNotAllowed() {
+        XYAddressable addressable = new XYAddressableImpl(0, 0);
+        gridImpl.add(addressable);
+        XYAddressable addressable2 = new XYAddressableImpl(0, 0);
+        assertThrows(IllegalStateException.class, () -> gridImpl.add(addressable2));
     }
 
     @Test
     void addOutsideGridBoundsNotAllowed() {
         assertAll(
                 () -> assertThrows(IllegalStateException.class,
-                        () -> gridImpl.add(new GridPlaceableImpl(-1, SIDE_SIZE))),
+                        () -> gridImpl.add(new XYAddressableImpl(-1, SIDE_SIZE))),
                 () -> assertThrows(IllegalStateException.class,
-                        () -> gridImpl.add(new GridPlaceableImpl(SIDE_SIZE, -1))),
+                        () -> gridImpl.add(new XYAddressableImpl(SIDE_SIZE, -1))),
                 () -> assertThrows(IllegalStateException.class,
-                        () -> gridImpl.add(new GridPlaceableImpl(0, SIDE_SIZE + 1))),
+                        () -> gridImpl.add(new XYAddressableImpl(0, SIDE_SIZE + 1))),
                 () -> assertThrows(IllegalStateException.class,
-                        () -> gridImpl.add(new GridPlaceableImpl(SIDE_SIZE + 1, 0))));
+                        () -> gridImpl.add(new XYAddressableImpl(SIDE_SIZE + 1, 0))));
     }
 
     @Test
@@ -74,26 +74,17 @@ public class GridImplTest {
 
     @Test
     void getAllIsCorrect() {
-        List<GridPlaceable> placeables = new ArrayList<>();
-        placeables.add(new GridPlaceableImpl(0, 0));
-        placeables.add(new GridPlaceableImpl(0, 1));
-        placeables.add(new GridPlaceableImpl(1, 0));
+        List<XYAddressable> addressables = new ArrayList<>();
+        addressables.add(new XYAddressableImpl(0, 0));
+        addressables.add(new XYAddressableImpl(0, 1));
+        addressables.add(new XYAddressableImpl(1, 0));
 
-        for (var placeable : placeables) {
-            gridImpl.add(placeable);
+        for (var addressable : addressables) {
+            gridImpl.add(addressable);
         }
 
-        assertEquals(placeables.size(), gridImpl.getAll().size());
-        assertAll(placeables.stream()
-                .map(placeable -> () -> assertTrue(gridImpl.getAll().contains(placeable))));
-    }
-
-    @Test
-    void correctlySetItselfToTheCell() {
-        int x = 0;
-        int y = 0;
-        GridPlaceable placeable = new GridPlaceableImpl(x, y);
-        gridImpl.add(placeable);
-        assertEquals(Optional.of(gridImpl), placeable.grid());
+        assertEquals(addressables.size(), gridImpl.getAll().size());
+        assertAll(addressables.stream()
+                .map(addressable -> () -> assertTrue(gridImpl.getAll().contains(addressable))));
     }
 }

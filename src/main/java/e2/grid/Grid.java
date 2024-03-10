@@ -5,11 +5,11 @@ import java.util.Optional;
 
 public interface Grid {
 
-    void add(GridPlaceable placeable);
+    void add(XYAddressable xyAddressable);
 
-    Optional<GridPlaceable> get(int x, int y);
+    Optional<XYAddressable> get(int x, int y);
 
-    Collection<GridPlaceable> getAll();
+    Collection<XYAddressable> getAll();
 
     int sideSize();
 }

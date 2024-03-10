@@ -1,7 +1,6 @@
 package e2;
 
 import java.util.Collection;
-import java.util.Optional;
 
 import e2.flaggable.Flaggable;
 import e2.flaggable.FlaggableImpl;
@@ -9,17 +8,16 @@ import e2.grid.*;
 import e2.hittable.Hittable;
 import e2.hittable.HittableImpl;
 
-public class MineSweeperCell extends GridPlaceableWithAdjacenceImpl implements Hittable, Flaggable {
+public class MineSweeperCell implements XYAddressableWithAdjacence, Hittable, Flaggable {
 
-    // private final GridPlaceableWithAdjacenceImpl gridPlaceable;
+    private final XYAddressableWithAdjacence xyAddressable;
     private final Hittable hittable = new HittableImpl();
     private final Flaggable flaggable = new FlaggableImpl();
     private final boolean hasMine;
 
     public MineSweeperCell(int x, int y, boolean hasMine) {
-        super(x, y);
         this.hasMine = hasMine;
-        // gridPlaceable = new GridPlaceableWithAdjacenceImpl(x, y);
+        xyAddressable = new XYAddressableWithAdjacenceImpl(x, y);
     }
 
     public MineSweeperCell(Pair<Integer, Integer> position, boolean hasMine) {
@@ -40,6 +38,18 @@ public class MineSweeperCell extends GridPlaceableWithAdjacenceImpl implements H
 
     public void setFlag(boolean b) {
         flaggable.setFlag(b);
+    }
+
+    public Integer getX() {
+        return xyAddressable.getX();
+    }
+
+    public Integer getY() {
+        return xyAddressable.getY();
+    }
+
+    public Collection<XYAddressable> adjacentAddressables() {
+        return xyAddressable.adjacentAddressables();
     }
 
     public boolean hasMine() {
