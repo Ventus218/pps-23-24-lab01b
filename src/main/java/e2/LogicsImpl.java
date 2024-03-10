@@ -89,4 +89,10 @@ public class LogicsImpl implements Logics {
         return (MineSweeperCell) grid.get(position.getX(), position.getY()).get();
     }
 
+    @Override
+    public void toggleFlag(Pair<Integer, Integer> position) {
+        var cell = getCell(position);
+        cell.setFlag(!cell.hasFlag());
+    }
+
 }

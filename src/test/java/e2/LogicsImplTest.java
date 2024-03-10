@@ -142,4 +142,46 @@ public class LogicsImplTest {
                 .stream()
                 .map((p) -> () -> assertFalse(logicsImpl.getCell(p).wasHit())));
     }
+
+    @Test
+    void allCellsAreInitiallyUnflagged() {
+        Set<Pair<Integer, Integer>> allPositions = new HashSet<>();
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int column = 0; column < BOARD_SIZE; column++) {
+                Pair<Integer, Integer> position = new Pair<>(row, column);
+                allPositions.add(position);
+            }
+        }
+
+        assertAll(allPositions
+                .stream()
+                .map(position -> logicsImpl.getCell(position))
+                .map((cell) -> {
+                    return () -> assertFalse(cell.hasFlag());
+                }));
+    }
+
+    @Test
+    void setFlag() {
+        var cell = logicsImpl.getCell(new Pair<>(0, 0));
+        cell.setFlag(true);
+        assertTrue(cell.hasFlag());
+    }
+
+    @Test
+    void unsetFlag() {
+        var cell = logicsImpl.getCell(new Pair<>(0, 0));
+        cell.setFlag(true);
+        cell.setFlag(false);
+        assertFalse(cell.hasFlag());
+    }
+
+    @Test
+    void toggleFlag() {
+        var position = new Pair<>(0, 0);
+        var cell = logicsImpl.getCell(position);
+        var initialValue = cell.hasFlag();
+        logicsImpl.toggleFlag(position);
+        assertEquals(!initialValue, cell.hasFlag());
+    }
 }

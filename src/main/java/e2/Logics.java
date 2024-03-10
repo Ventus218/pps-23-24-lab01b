@@ -12,4 +12,6 @@ public interface Logics {
 
     MineSweeperCell getCell(Pair<Integer, Integer> pair);
 
+    void toggleFlag(Pair<Integer, Integer> position);
+
 }
