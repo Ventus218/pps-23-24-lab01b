@@ -1,17 +1,13 @@
-package e2.cell;
+package e2.grid;
 
 import e2.Pair;
 
-public class CellImpl implements Cell {
+public class XYAddressableImpl implements XYAddressable {
 
     private final Pair<Integer, Integer> coordinates;
 
-    public CellImpl(int x, int y) {
+    public XYAddressableImpl(int x, int y) {
         this.coordinates = new Pair<>(x, y);
-    }
-
-    public CellImpl(Pair<Integer, Integer> coordinates) {
-        this(coordinates.getX(), coordinates.getY());
     }
 
     @Override
@@ -23,4 +19,5 @@ public class CellImpl implements Cell {
     public Integer getY() {
         return coordinates.getY();
     }
+
 }

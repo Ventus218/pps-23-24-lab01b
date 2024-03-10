@@ -11,37 +11,17 @@ import org.junit.jupiter.api.Test;
 
 public class GridImplTest {
 
-    private class MockGridPlaceable implements GridPlaceable {
-        private final int x;
-        private final int y;
-
-        public MockGridPlaceable(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-
-        @Override
-        public Integer getX() {
-            return x;
-        }
-
-        @Override
-        public Integer getY() {
-            return y;
-        }
-    }
-
     private static final int SIDE_SIZE = 3;
-    Grid<GridPlaceable> gridImpl;
+    Grid gridImpl;
 
     @BeforeEach
     void init() {
-        gridImpl = new GridImpl<>(SIDE_SIZE);
+        gridImpl = new GridImpl(SIDE_SIZE);
     }
 
     @Test
     void sideSizeCannotBeLowerThanOne() {
-        assertThrows(IllegalArgumentException.class, () -> new GridImpl<>(0));
+        assertThrows(IllegalArgumentException.class, () -> new GridImpl(0));
     }
 
     @Test
@@ -53,16 +33,16 @@ public class GridImplTest {
     void addPlaceable() {
         int x = 0;
         int y = 0;
-        GridPlaceable placeable = new MockGridPlaceable(x, y);
+        GridPlaceable placeable = new GridPlaceableImpl(x, y);
         gridImpl.add(placeable);
         assertEquals(Optional.of(placeable), gridImpl.get(x, y));
     }
 
     @Test
     void addPlaceableWithSameCoordinatesNotAllowed() {
-        GridPlaceable placeable = new MockGridPlaceable(0, 0);
+        GridPlaceable placeable = new GridPlaceableImpl(0, 0);
         gridImpl.add(placeable);
-        GridPlaceable placeable2 = new MockGridPlaceable(0, 0);
+        GridPlaceable placeable2 = new GridPlaceableImpl(0, 0);
         assertThrows(IllegalStateException.class, () -> gridImpl.add(placeable2));
     }
 
@@ -70,13 +50,13 @@ public class GridImplTest {
     void addOutsideGridBoundsNotAllowed() {
         assertAll(
                 () -> assertThrows(IllegalStateException.class,
-                        () -> gridImpl.add(new MockGridPlaceable(-1, SIDE_SIZE))),
+                        () -> gridImpl.add(new GridPlaceableImpl(-1, SIDE_SIZE))),
                 () -> assertThrows(IllegalStateException.class,
-                        () -> gridImpl.add(new MockGridPlaceable(SIDE_SIZE, -1))),
+                        () -> gridImpl.add(new GridPlaceableImpl(SIDE_SIZE, -1))),
                 () -> assertThrows(IllegalStateException.class,
-                        () -> gridImpl.add(new MockGridPlaceable(0, SIDE_SIZE + 1))),
+                        () -> gridImpl.add(new GridPlaceableImpl(0, SIDE_SIZE + 1))),
                 () -> assertThrows(IllegalStateException.class,
-                        () -> gridImpl.add(new MockGridPlaceable(SIDE_SIZE + 1, 0))));
+                        () -> gridImpl.add(new GridPlaceableImpl(SIDE_SIZE + 1, 0))));
     }
 
     @Test
@@ -95,9 +75,9 @@ public class GridImplTest {
     @Test
     void getAllIsCorrect() {
         List<GridPlaceable> placeables = new ArrayList<>();
-        placeables.add(new MockGridPlaceable(0, 0));
-        placeables.add(new MockGridPlaceable(0, 1));
-        placeables.add(new MockGridPlaceable(1, 0));
+        placeables.add(new GridPlaceableImpl(0, 0));
+        placeables.add(new GridPlaceableImpl(0, 1));
+        placeables.add(new GridPlaceableImpl(1, 0));
 
         for (var placeable : placeables) {
             gridImpl.add(placeable);
@@ -106,5 +86,14 @@ public class GridImplTest {
         assertEquals(placeables.size(), gridImpl.getAll().size());
         assertAll(placeables.stream()
                 .map(placeable -> () -> assertTrue(gridImpl.getAll().contains(placeable))));
+    }
+
+    @Test
+    void correctlySetItselfToTheCell() {
+        int x = 0;
+        int y = 0;
+        GridPlaceable placeable = new GridPlaceableImpl(x, y);
+        gridImpl.add(placeable);
+        assertEquals(Optional.of(gridImpl), placeable.grid());
     }
 }

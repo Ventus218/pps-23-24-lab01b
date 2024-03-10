@@ -3,13 +3,13 @@ package e2.grid;
 import java.util.Collection;
 import java.util.Optional;
 
-public interface Grid<T extends GridPlaceable> {
+public interface Grid {
 
-    void add(T placeable);
+    void add(GridPlaceable placeable);
 
-    Optional<T> get(int x, int y);
+    Optional<GridPlaceable> get(int x, int y);
 
-    Collection<T> getAll();
+    Collection<GridPlaceable> getAll();
 
     int sideSize();
 }

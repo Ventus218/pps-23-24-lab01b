@@ -1,7 +1,10 @@
 package e2.grid;
 
-public interface GridPlaceable {
-    Integer getX();
+import java.util.Optional;
 
-    Integer getY();
+public interface GridPlaceable extends XYAddressable {
+
+    void setGrid(Grid grid);
+
+    Optional<Grid> grid();
 }

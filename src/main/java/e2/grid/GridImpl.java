@@ -7,10 +7,10 @@ import java.util.Optional;
 
 import e2.Pair;
 
-public class GridImpl<T extends GridPlaceable> implements Grid<T> {
+public class GridImpl implements Grid {
 
     private int sideSize;
-    private final Map<Pair<Integer, Integer>, T> gridMap = new HashMap<>();
+    private final Map<Pair<Integer, Integer>, GridPlaceable> gridMap = new HashMap<>();
 
     public GridImpl(int sideSize) {
         if (sideSize < 1) {
@@ -20,7 +20,7 @@ public class GridImpl<T extends GridPlaceable> implements Grid<T> {
     }
 
     @Override
-    public void add(T placeable) {
+    public void add(GridPlaceable placeable) {
         int x = placeable.getX();
         int y = placeable.getY();
         checkBounds(x, y);
@@ -29,16 +29,17 @@ public class GridImpl<T extends GridPlaceable> implements Grid<T> {
             throw new IllegalStateException("Trying to add to non-empty grid coordinates");
         }
         gridMap.put(pair, placeable);
+        placeable.setGrid(this);
     }
 
     @Override
-    public Optional<T> get(int x, int y) {
+    public Optional<GridPlaceable> get(int x, int y) {
         checkBounds(x, y);
         return Optional.ofNullable(gridMap.get(new Pair<>(x, y)));
     }
 
     @Override
-    public Collection<T> getAll() {
+    public Collection<GridPlaceable> getAll() {
         return gridMap.values();
     }
 

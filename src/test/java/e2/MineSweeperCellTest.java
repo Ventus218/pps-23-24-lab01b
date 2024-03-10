@@ -1,11 +1,9 @@
-package e2.cell;
+package e2;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import e2.Pair;
 
 public class MineSweeperCellTest {
     private static final int X = 1;
@@ -30,4 +28,5 @@ public class MineSweeperCellTest {
         cell = new MineSweeperCell(cell.getX(), cell.getY(), hasMine);
         assertEquals(hasMine, cell.hasMine());
     }
+
 }

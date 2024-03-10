@@ -1,21 +1,25 @@
-package e2.cell;
+package e2;
 
-import e2.Pair;
+import java.util.Optional;
+
 import e2.flaggable.Flaggable;
 import e2.flaggable.FlaggableImpl;
+import e2.grid.Grid;
+import e2.grid.GridPlaceable;
+import e2.grid.GridPlaceableImpl;
 import e2.hittable.Hittable;
 import e2.hittable.HittableImpl;
 
-public class MineSweeperCell implements Cell, Hittable, Flaggable {
+public class MineSweeperCell implements GridPlaceable, Hittable, Flaggable {
 
-    private final CellImpl cellImpl;
+    private final GridPlaceable gridPlaceable;
     private final Hittable hittable = new HittableImpl();
     private final Flaggable flaggable = new FlaggableImpl();
     private final boolean hasMine;
 
     public MineSweeperCell(int x, int y, boolean hasMine) {
         this.hasMine = hasMine;
-        cellImpl = new CellImpl(x, y);
+        gridPlaceable = new GridPlaceableImpl(x, y);
     }
 
     public MineSweeperCell(Pair<Integer, Integer> position, boolean hasMine) {
@@ -40,15 +44,25 @@ public class MineSweeperCell implements Cell, Hittable, Flaggable {
 
     @Override
     public Integer getX() {
-        return cellImpl.getX();
+        return gridPlaceable.getX();
     }
 
     @Override
     public Integer getY() {
-        return cellImpl.getY();
+        return gridPlaceable.getY();
     }
 
     public boolean hasMine() {
         return hasMine;
+    }
+
+    @Override
+    public void setGrid(Grid grid) {
+        gridPlaceable.setGrid(grid);
+    }
+
+    @Override
+    public Optional<Grid> grid() {
+        return gridPlaceable.grid();
     }
 }

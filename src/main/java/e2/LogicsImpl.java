@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import e2.cell.*;
 import e2.grid.Grid;
 import e2.grid.GridImpl;
 import e2.mine_placer.MinePlacer;
@@ -12,13 +11,13 @@ import e2.mine_placer.RandomMinePlacer;
 
 public class LogicsImpl implements Logics {
 
-    private final Grid<MineSweeperCell> grid;
+    private final Grid grid;
 
     public LogicsImpl(MinePlacer minePlacer) {
         if (minePlacer.numberOfMinesToPlace() >= Math.pow(minePlacer.boardSize(), 2)) {
             throw new IllegalArgumentException("Mines cannot completely cover the board");
         }
-        grid = new GridImpl<>(minePlacer.boardSize());
+        grid = new GridImpl(minePlacer.boardSize());
         createCells(minePlacer);
     }
 
@@ -41,6 +40,7 @@ public class LogicsImpl implements Logics {
         return Collections
                 .unmodifiableSet(grid.getAll()
                         .stream()
+                        .map(cell -> (MineSweeperCell) cell)
                         .filter(cell -> cell.hasMine())
                         .map(cell -> new Pair<>(cell.getX(), cell.getY()))
                         .collect(Collectors.toSet()));
@@ -52,8 +52,9 @@ public class LogicsImpl implements Logics {
         var y = position.getY();
         var cell = grid.get(x, y);
         if (cell.isPresent()) {
-            cell.get().hit();
-            return cell.get().hasMine();
+            var mineSweeperCell = (MineSweeperCell) cell.get();
+            mineSweeperCell.hit();
+            return mineSweeperCell.hasMine();
         }
         return false;
     }
