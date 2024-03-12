@@ -3,39 +3,33 @@ package e2.grid;
 import java.util.Collection;
 import java.util.Optional;
 
-public class GridWithAdjacenceImpl implements Grid {
+public class GridWithAdjacenceImpl<T extends XYAddressableWithAdjacence> implements Grid<T> {
 
-    Grid gridImpl;
+    Grid<T> gridImpl;
 
     public GridWithAdjacenceImpl(int sideSize) {
-        gridImpl = new GridImpl(sideSize);
+        gridImpl = new GridImpl<>(sideSize);
     }
 
-    public void add(XYAddressable xyAddressable) {
-        if (xyAddressable instanceof XYAddressableWithAdjacence addressableWithAdjacence) {
-            addressableWithAdjacence.adjacentAddressables().addAll(getAll()
-                    .stream()
-                    .filter(a -> {
-                        var xDelta = Math.abs(a.getX() - xyAddressable.getX());
-                        var yDelta = Math.abs(a.getY() - xyAddressable.getY());
-                        var delta = xDelta + yDelta;
-                        return delta != 0 && xDelta <= 1 && yDelta <= 1;
-                    })
-                    .peek(a -> {
-                        if (a instanceof XYAddressableWithAdjacence aWithAdj) {
-                            aWithAdj.adjacentAddressables().add(xyAddressable);
-                        }
-                    })
-                    .toList());
-        }
+    public void add(T xyAddressable) {
+        xyAddressable.adjacentAddressables().addAll(getAll()
+                .stream()
+                .filter(a -> {
+                    var xDelta = Math.abs(a.getX() - xyAddressable.getX());
+                    var yDelta = Math.abs(a.getY() - xyAddressable.getY());
+                    var delta = xDelta + yDelta;
+                    return delta != 0 && xDelta <= 1 && yDelta <= 1;
+                })
+                .peek(a -> a.adjacentAddressables().add(xyAddressable))
+                .toList());
         gridImpl.add(xyAddressable);
     }
 
-    public Optional<XYAddressable> get(int x, int y) {
+    public Optional<T> get(int x, int y) {
         return gridImpl.get(x, y);
     }
 
-    public Collection<XYAddressable> getAll() {
+    public Collection<T> getAll() {
         return gridImpl.getAll();
     }
 

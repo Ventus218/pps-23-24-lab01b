@@ -7,10 +7,10 @@ import java.util.Optional;
 
 import e2.Pair;
 
-public class GridImpl implements Grid {
+public class GridImpl<T extends XYAddressable> implements Grid<T> {
 
     private int sideSize;
-    private final Map<Pair<Integer, Integer>, XYAddressable> gridMap = new HashMap<>();
+    private final Map<Pair<Integer, Integer>, T> gridMap = new HashMap<>();
 
     public GridImpl(int sideSize) {
         if (sideSize < 1) {
@@ -20,7 +20,7 @@ public class GridImpl implements Grid {
     }
 
     @Override
-    public void add(XYAddressable xyAddressable) {
+    public void add(T xyAddressable) {
         int x = xyAddressable.getX();
         int y = xyAddressable.getY();
         checkBounds(x, y);
@@ -32,13 +32,13 @@ public class GridImpl implements Grid {
     }
 
     @Override
-    public Optional<XYAddressable> get(int x, int y) {
+    public Optional<T> get(int x, int y) {
         checkBounds(x, y);
         return Optional.ofNullable(gridMap.get(new Pair<>(x, y)));
     }
 
     @Override
-    public Collection<XYAddressable> getAll() {
+    public Collection<T> getAll() {
         return gridMap.values();
     }
 

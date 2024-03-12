@@ -3,13 +3,13 @@ package e2.grid;
 import java.util.Collection;
 import java.util.Optional;
 
-public interface Grid {
+public interface Grid<T extends XYAddressable> {
 
-    void add(XYAddressable xyAddressable);
+    void add(T xyAddressable);
 
-    Optional<XYAddressable> get(int x, int y);
+    Optional<T> get(int x, int y);
 
-    Collection<XYAddressable> getAll();
+    Collection<T> getAll();
 
     int sideSize();
 }
