@@ -60,7 +60,7 @@ public class LogicsImpl implements Logics {
             }
             if (numberOfAdjacentMines(position) == 0) {
                 for (var adjacentCell : mineSweeperCell.adjacentAddressables()) {
-                    if (!((MineSweeperCell) adjacentCell).wasHit()) {
+                    if (!adjacentCell.wasHit()) {
                         hit(new Pair<>(adjacentCell.getX(), adjacentCell.getY()));
                     }
                 }
@@ -77,7 +77,6 @@ public class LogicsImpl implements Logics {
         var cell = grid.get(position.getX(), position.getY()).get();
         return Math.toIntExact(cell.adjacentAddressables()
                 .stream()
-                .map(addressable -> ((MineSweeperCell) addressable))
                 .filter(mineSweeperCell -> mineSweeperCell.hasMine())
                 .count());
     }

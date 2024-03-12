@@ -8,16 +8,16 @@ import e2.grid.*;
 import e2.hittable.Hittable;
 import e2.hittable.HittableImpl;
 
-public class MineSweeperCell implements XYAddressableWithAdjacence, Hittable, Flaggable {
+public class MineSweeperCell implements XYAddressableWithAdjacence<MineSweeperCell>, Hittable, Flaggable {
 
-    private final XYAddressableWithAdjacence xyAddressable;
+    private final XYAddressableWithAdjacence<MineSweeperCell> xyAddressable;
     private final Hittable hittable = new HittableImpl();
     private final Flaggable flaggable = new FlaggableImpl();
     private final boolean hasMine;
 
     public MineSweeperCell(int x, int y, boolean hasMine) {
         this.hasMine = hasMine;
-        xyAddressable = new XYAddressableWithAdjacenceImpl(x, y);
+        xyAddressable = new XYAddressableWithAdjacenceImpl<>(x, y);
     }
 
     public MineSweeperCell(Pair<Integer, Integer> position, boolean hasMine) {
@@ -48,7 +48,7 @@ public class MineSweeperCell implements XYAddressableWithAdjacence, Hittable, Fl
         return xyAddressable.getY();
     }
 
-    public Collection<XYAddressable> adjacentAddressables() {
+    public Collection<MineSweeperCell> adjacentAddressables() {
         return xyAddressable.adjacentAddressables();
     }
 

@@ -3,7 +3,7 @@ package e2.grid;
 import java.util.Collection;
 import java.util.Optional;
 
-public class GridWithAdjacenceImpl<T extends XYAddressableWithAdjacence> implements Grid<T> {
+public class GridWithAdjacenceImpl<T extends XYAddressableWithAdjacence<T>> implements Grid<T> {
 
     Grid<T> gridImpl;
 

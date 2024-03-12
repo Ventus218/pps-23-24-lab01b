@@ -6,10 +6,11 @@ import java.util.ArrayList;
 
 import e2.Pair;
 
-public class XYAddressableWithAdjacenceImpl implements XYAddressableWithAdjacence {
+public class XYAddressableWithAdjacenceImpl<AdjType extends XYAddressableWithAdjacence<AdjType>>
+        implements XYAddressableWithAdjacence<AdjType> {
 
     private XYAddressableImpl xyAddressableImpl;
-    List<XYAddressable> adjacentAddressables = new ArrayList<>();
+    List<AdjType> adjacentAddressables = new ArrayList<>();
 
     public XYAddressableWithAdjacenceImpl(int x, int y) {
         xyAddressableImpl = new XYAddressableImpl(x, y);
@@ -28,7 +29,7 @@ public class XYAddressableWithAdjacenceImpl implements XYAddressableWithAdjacenc
     }
 
     @Override
-    public Collection<XYAddressable> adjacentAddressables() {
+    public Collection<AdjType> adjacentAddressables() {
         return adjacentAddressables;
     }
 }
